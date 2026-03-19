@@ -1,0 +1,130 @@
+/* General Body Reset */
+body {
+  margin: 0;
+  padding: 0;
+  background: #121212; /* Dark background */
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Main Container - Mobile Friendly */
+.home {
+  background: #1e1e1e;
+  width: 90%;          /* Takes 90% of screen on mobile */
+  max-width: 450px;    /* Stops getting too big on PC */
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Nice shadow */
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-weight: 700;
+  background: -webkit-linear-gradient(45deg, #00d2ff, #3a7bd5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Create Form */
+.create_form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.create_form input {
+  flex-grow: 1;
+  padding: 12px;
+  border: 1px solid #444;
+  background-color: #2c2c2c;
+  color: white;
+  border-radius: 25px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.create_form input:focus {
+  border-color: #00d2ff;
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.3); /* Input Glow */
+}
+
+.create_form button {
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.create_form button:active {
+  transform: scale(0.95);
+}
+
+/* Task List Styling */
+.task-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #252525;
+  padding: 12px 15px;
+  border-radius: 10px;
+  transition: 0.3s;
+  border-left: 4px solid transparent;
+}
+
+.task:hover {
+  background-color: #2f2f2f;
+  border-left: 4px solid #00d2ff; /* Hover effect */
+}
+
+/* Checkbox & Icons */
+.checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.icon {
+  font-size: 20px;
+  transition: 0.3s;
+}
+
+.icon.unchecked {
+  color: #555;
+}
+
+.icon.checked {
+  color: #00ff88; /* Green for done */
+  filter: drop-shadow(0 0 5px #00ff88); /* Backlight/Glow Effect */
+}
+
+.delete-icon {
+  color: #ff4d4d;
+  cursor: pointer;
+}
+
+.delete-icon:hover {
+  color: #ff0000;
+  transform: scale(1.2);
+}
+
+/* Text Strikethrough */
+.line_through {
+  text-decoration: line-through;
+  color: #666;
+}
