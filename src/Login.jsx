@@ -10,26 +10,46 @@ function Login() {
     const navigate = useNavigate()
 
     const handleLogin = () => {
+        if (!email || !password) {
+            alert("Please enter email and password")
+            return
+        }
+
         axios.post(`${BASE_URL}/login`, { email, password })
-        .then(res => {
-            if(res.data.userId){
-                localStorage.setItem("userId", res.data.userId)
-                navigate('/')
-            } else {
-                alert(res.data)
-            }
-        })
-        .catch(err => console.log(err))
+            .then(res => {
+                console.log("Login response:", res.data)
+                
+                if (res.data.userId) {
+                    localStorage.setItem("userId", res.data.userId)
+                    console.log("UserId saved, navigating to /")
+                    navigate('/')
+                } else {
+                    alert("Login failed: " + res.data)
+                }
+            })
+            .catch(err => {
+                console.log("Login error:", err)
+                alert("Login error: " + err.message)
+            })
     }
 
     return (
         <div>
             <h2>Login</h2>
-            <input type="text" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
+            <input 
+                type="text" 
+                placeholder="Email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} 
+            />
+            <input 
+                type="password" 
+                placeholder="Password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} 
+            />
             <button onClick={handleLogin}>Login</button>
 
-            {/* ✅ ADD THIS LINK */}
             <p>Don't have an account? 
                 <span 
                     onClick={() => navigate('/signup')} 
