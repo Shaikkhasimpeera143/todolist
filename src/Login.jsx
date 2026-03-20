@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,6 +9,11 @@ function Login() {
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    // ✅ Wake up Render server as soon as login page opens
+    useEffect(() => {
+        axios.get(`${BASE_URL}/get/ping`).catch(() => {})
+    }, [])
 
     const handleLogin = () => {
         if (!email || !password) {
