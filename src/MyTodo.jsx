@@ -11,12 +11,15 @@ function MyTodo() {
     const userId = localStorage.getItem("userId"); // ✅ IMPORTANT
 
     useEffect(() => {
-        if (!userId) return;
+    if (!userId) {
+        window.location.href = "/login"; // redirect
+        return;
+    }
 
-        axios.get(`${BASE_URL}/get/${userId}`) // ✅ FIXED
-        .then(result => setTodos(result.data))
-        .catch(err => console.log(err))
-    }, [userId])
+    axios.get(`${BASE_URL}/get/${userId}`)
+    .then(result => setTodos(result.data))
+    .catch(err => console.log(err))
+}, [userId])
 
     const handleEdit = (id) => {
         axios.put(`${BASE_URL}/update/${id}`)
