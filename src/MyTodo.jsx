@@ -1,160 +1,169 @@
 import React, { useEffect, useState } from 'react'
 import Create from './Create'
 import axios from 'axios'
-import { BsCircleFill, BsFillCheckCircleFill, BsFillTrashFill } from 'react-icons/bs';
+import { BsCircleFill, BsFillCheckCircleFill, BsFillTrashFill } from 'react-icons/bs'
 
 const BASE_URL = "https://todolist-9z93.onrender.com";
 
 function MyTodo() {
     const [todos, setTodos] = useState([])
-    const userId = localStorage.getItem("userId");
-    const userEmail = localStorage.getItem("userEmail");
+    const userId = localStorage.getItem("userId")
+    const userEmail = localStorage.getItem("userEmail") || "User"
 
     useEffect(() => {
         if (!userId) {
-            window.location.href = "/login";
-            return;
+            window.location.href = "/login"
+            return
         }
         axios.get(`${BASE_URL}/get/${userId}`)
             .then(result => setTodos(result.data))
             .catch(err => console.log(err))
     }, [userId])
 
-    const handleEdit = (id) => {
-        axios.put(`${BASE_URL}/update/${id}`)
-            .then(() => {
-                setTodos(prevTodos =>
-                    prevTodos.map(todo =>
-                        todo._id === id ? { ...todo, done: !todo.done } : todo
-                    )
-                )
-            })
-            .catch(err => console.log(err))
-    }
-
-    const handleDelete = (id) => {
-        axios.delete(`${BASE_URL}/delete/${id}`)
-            .then(() => {
-                setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id))
-            })
-            .catch(err => console.log(err))
-    }
-
     const handleLogout = () => {
         localStorage.clear()
         window.location.href = "/login"
     }
 
+    const refreshTodos = () => {
+        axios.get(`${BASE_URL}/get/${userId}`)
+            .then(result => setTodos(result.data))
+    }
+
+    const handleEdit = (id) => {
+        axios.put(`${BASE_URL}/update/${id}`)
+            .then(() => {
+                setTodos(prev => prev.map(todo =>
+                    todo._id === id ? { ...todo, done: !todo.done } : todo
+                ))
+            })
+    }
+
+    const handleDelete = (id) => {
+        axios.delete(`${BASE_URL}/delete/${id}`)
+            .then(() => {
+                setTodos(prev => prev.filter(todo => todo._id !== id))
+            })
+    }
+
     return (
         <div style={{
             minHeight: '100vh',
+            width: '100%',
             background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
-            padding: '20px'
+            padding: '16px',
+            boxSizing: 'border-box',
+            fontFamily: "'Segoe UI', sans-serif"
         }}>
-            {/* Header with greeting + logout */}
+            {/* Header */}
             <div style={{
+                maxWidth: '640px',
+                margin: '0 auto',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                maxWidth: '600px',
-                margin: '0 auto 20px auto'
+                padding: 'clamp(12px, 3vw, 20px) 0',
+                marginBottom: '10px'
             }}>
                 <div>
-                    <p style={{ color: 'rgba(255,255,255,0.6)', margin: 0, fontSize: '13px' }}>👋 Welcome back,</p>
-                    <p style={{ color: 'white', margin: 0, fontWeight: 'bold', fontSize: '15px' }}>
-                        🌟 {userEmail || "Todo User"}
-                    </p>
+                    <h1 style={{
+                        color: 'white',
+                        margin: 0,
+                        fontSize: 'clamp(20px, 5vw, 28px)',
+                        fontWeight: '700'
+                    }}>📋 Todo List</h1>
+                    <p style={{
+                        color: 'rgba(255,255,255,0.5)',
+                        margin: '4px 0 0',
+                        fontSize: 'clamp(11px, 2.5vw, 13px)'
+                    }}>👋 Welcome, {userEmail}</p>
                 </div>
                 <button
                     onClick={handleLogout}
                     style={{
-                        padding: '8px 18px',
-                        borderRadius: '20px',
-                        border: '1px solid rgba(255,100,100,0.5)',
-                        background: 'rgba(255,100,100,0.15)',
+                        padding: 'clamp(7px, 2vw, 10px) clamp(12px, 3vw, 20px)',
+                        borderRadius: '10px',
+                        border: 'none',
+                        background: 'rgba(255,80,80,0.2)',
                         color: '#ff6b6b',
+                        fontSize: 'clamp(12px, 2.5vw, 14px)',
+                        fontWeight: '600',
                         cursor: 'pointer',
-                        fontSize: '13px',
-                        fontWeight: 'bold'
+                        border: '1px solid rgba(255,80,80,0.3)',
+                        whiteSpace: 'nowrap'
                     }}
                 >
                     🚪 Logout
                 </button>
             </div>
 
-            {/* Main card */}
+            {/* Main Card */}
             <div style={{
+                maxWidth: '640px',
+                margin: '0 auto',
                 background: 'rgba(255,255,255,0.05)',
                 backdropFilter: 'blur(10px)',
                 borderRadius: '20px',
-                padding: '30px',
-                maxWidth: '600px',
-                margin: '0 auto',
+                padding: 'clamp(16px, 4vw, 32px)',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-                border: '1px solid rgba(255,255,255,0.1)'
+                border: '1px solid rgba(255,255,255,0.1)',
+                boxSizing: 'border-box'
             }}>
-                <h2 style={{
-                    textAlign: 'center',
-                    color: 'white',
-                    marginTop: 0,
-                    fontSize: '28px'
-                }}>
-                    📝 My Todo List
-                </h2>
-
-                <Create refreshTodos={() => {
-                    axios.get(`${BASE_URL}/get/${userId}`)
-                        .then(result => setTodos(result.data))
-                }} />
+                <Create refreshTodos={refreshTodos} />
 
                 <div style={{ marginTop: '20px' }}>
                     {todos.length === 0
-                        ? <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', padding: '30px' }}>
-                            <div style={{ fontSize: '40px' }}>🎉</div>
-                            <p>No tasks yet! Add your first task above.</p>
-                          </div>
+                        ? <div style={{
+                            textAlign: 'center',
+                            padding: '40px 0',
+                            color: 'rgba(255,255,255,0.3)',
+                            fontSize: 'clamp(14px, 3vw, 16px)'
+                        }}>
+                            <div style={{ fontSize: '40px', marginBottom: '10px' }}>🎉</div>
+                            No tasks yet! Add one above.
+                        </div>
                         : todos.map(todo => (
                             <div key={todo._id} style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
+                                padding: 'clamp(10px, 2vw, 14px) clamp(12px, 3vw, 18px)',
+                                marginBottom: '10px',
                                 background: 'rgba(255,255,255,0.05)',
                                 borderRadius: '12px',
-                                padding: '14px 18px',
-                                marginBottom: '10px',
-                                border: '1px solid rgba(255,255,255,0.08)'
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                transition: 'all 0.2s'
                             }}>
                                 <div
                                     style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', flex: 1 }}
                                     onClick={() => handleEdit(todo._id)}
                                 >
                                     {todo.done
-                                        ? <BsFillCheckCircleFill style={{ color: '#38ef7d', fontSize: '20px', flexShrink: 0 }} />
-                                        : <BsCircleFill style={{ color: 'rgba(255,255,255,0.3)', fontSize: '20px', flexShrink: 0 }} />
+                                        ? <BsFillCheckCircleFill style={{ color: '#38ef7d', fontSize: 'clamp(18px, 4vw, 22px)', flexShrink: 0 }} />
+                                        : <BsCircleFill style={{ color: 'rgba(255,255,255,0.2)', fontSize: 'clamp(18px, 4vw, 22px)', flexShrink: 0 }} />
                                     }
                                     <p style={{
                                         margin: 0,
                                         color: todo.done ? 'rgba(255,255,255,0.3)' : 'white',
                                         textDecoration: todo.done ? 'line-through' : 'none',
-                                        fontSize: '15px'
-                                    }}>
-                                        {todo.task}
-                                    </p>
+                                        fontSize: 'clamp(13px, 3vw, 15px)',
+                                        wordBreak: 'break-word'
+                                    }}>{todo.task}</p>
                                 </div>
                                 <BsFillTrashFill
                                     onClick={() => handleDelete(todo._id)}
-                                    style={{ color: '#ff6b6b', fontSize: '18px', cursor: 'pointer', flexShrink: 0 }}
+                                    style={{
+                                        color: '#ff6b6b',
+                                        fontSize: 'clamp(16px, 3.5vw, 20px)',
+                                        cursor: 'pointer',
+                                        flexShrink: 0,
+                                        marginLeft: '12px'
+                                    }}
                                 />
                             </div>
                         ))
                     }
                 </div>
-
-                {todos.length > 0 && (
-                    <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: '13px', marginBottom: 0 }}>
-                        ✅ {todos.filter(t => t.done).length}/{todos.length} tasks completed
-                    </p>
-                )}
             </div>
         </div>
     )
