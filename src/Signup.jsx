@@ -7,23 +7,122 @@ const BASE_URL = "https://todolist-9z93.onrender.com";
 function Signup() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const handleSignup = () => {
+        if (!email || !password) {
+            alert("Please enter email and password")
+            return
+        }
+        setLoading(true)
         axios.post(`${BASE_URL}/signup`, { email, password })
             .then(res => {
-                alert("Signup successful! Please login.")
+                alert("🎉 Signup successful! Please login.")
                 navigate('/login')
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                alert("Signup failed!")
+                setLoading(false)
+            })
     }
 
     return (
-        <div>
-            <h2>Signup</h2>
-            <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={handleSignup}>Signup</button>
+        <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)'
+        }}>
+            <div style={{
+                background: 'rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '20px',
+                padding: '40px',
+                width: '380px',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                border: '1px solid rgba(255,255,255,0.1)'
+            }}>
+                <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                    <div style={{ fontSize: '48px' }}>🎯</div>
+                    <h2 style={{ color: 'white', margin: '10px 0 5px', fontSize: '28px' }}>Create Account</h2>
+                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>Start managing your tasks today!</p>
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                    <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', marginBottom: '6px', display: 'block' }}>📧 Email</label>
+                    <input
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{
+                            width: '100%',
+                            padding: '12px 16px',
+                            borderRadius: '10px',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            background: 'rgba(255,255,255,0.08)',
+                            color: 'white',
+                            fontSize: '14px',
+                            outline: 'none',
+                            boxSizing: 'border-box'
+                        }}
+                    />
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                    <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', marginBottom: '6px', display: 'block' }}>🔒 Password</label>
+                    <input
+                        type="password"
+                        placeholder="Create a password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSignup()}
+                        style={{
+                            width: '100%',
+                            padding: '12px 16px',
+                            borderRadius: '10px',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            background: 'rgba(255,255,255,0.08)',
+                            color: 'white',
+                            fontSize: '14px',
+                            outline: 'none',
+                            boxSizing: 'border-box'
+                        }}
+                    />
+                </div>
+
+                <button
+                    onClick={handleSignup}
+                    disabled={loading}
+                    style={{
+                        width: '100%',
+                        padding: '13px',
+                        borderRadius: '10px',
+                        border: 'none',
+                        background: loading ? '#555' : 'linear-gradient(135deg, #11998e, #38ef7d)',
+                        color: 'white',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        marginBottom: '16px',
+                        transition: 'all 0.3s'
+                    }}
+                >
+                    {loading ? '⏳ Creating...' : '🎉 Create Account'}
+                </button>
+
+                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>
+                    Already have an account?{' '}
+                    <span
+                        onClick={() => navigate('/login')}
+                        style={{ color: '#38ef7d', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                        Login
+                    </span>
+                </p>
+            </div>
         </div>
     )
 }
