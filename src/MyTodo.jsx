@@ -7,13 +7,13 @@ function Home() {
     const [todos, setTodos] = useState([])
 
     useEffect(() => {
-        axios.get('http://localhost:3001/get')
+        axios.get('https://todolist-9z93.onrender.com/get')
         .then(result => setTodos(result.data))
         .catch(err => console.log(err))
     }, [])
 
     const handleEdit = (id) => {
-        axios.put('http://localhost:3001/update/'+id)
+        axios.put('https://todolist-9z93.onrender.com/update/'+id)
         .then(result => {
             // Instantly update the UI without reloading
             setTodos(prevTodos => 
@@ -26,7 +26,7 @@ function Home() {
     }
 
     const handleDelete = (id) => {
-        axios.delete('http://localhost:3001/delete/'+id)
+        axios.delete('https://todolist-9z93.onrender.com/delete/'+id)
         .then(result => {
             // Instantly remove from UI without reloading
             setTodos(prevTodos => prevTodos.filter(todo => todo._id !== id))
