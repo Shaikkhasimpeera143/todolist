@@ -28,6 +28,16 @@ function Login() {
             <input type="text" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} />
             <input type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
             <button onClick={handleLogin}>Login</button>
+
+            {/* ✅ ADD THIS LINK */}
+            <p>Don't have an account? 
+                <span 
+                    onClick={() => navigate('/signup')} 
+                    style={{color: 'blue', cursor: 'pointer', marginLeft: '5px'}}
+                >
+                    Signup
+                </span>
+            </p>
         </div>
     )
 }
