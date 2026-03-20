@@ -1,25 +1,29 @@
-/* General Body Reset */
-body {
+* {
   margin: 0;
   padding: 0;
-  background: #121212; /* Dark background */
-  color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-/* Main Container - Mobile Friendly */
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #121212;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Todo page styles */
 .home {
-  background: #1e1e1e;
-  width: 90%;          /* Takes 90% of screen on mobile */
-  max-width: 450px;    /* Stops getting too big on PC */
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
   padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Nice shadow */
-  text-align: center;
+  box-sizing: border-box;
 }
 
 .title {
@@ -30,7 +34,6 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Create Form */
 .create_form {
   display: flex;
   gap: 10px;
@@ -50,7 +53,7 @@ body {
 
 .create_form input:focus {
   border-color: #00d2ff;
-  box-shadow: 0 0 8px rgba(0, 210, 255, 0.3); /* Input Glow */
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.3);
 }
 
 .create_form button {
@@ -68,7 +71,6 @@ body {
   transform: scale(0.95);
 }
 
-/* Task List Styling */
 .task-container {
   display: flex;
   flex-direction: column;
@@ -88,10 +90,9 @@ body {
 
 .task:hover {
   background-color: #2f2f2f;
-  border-left: 4px solid #00d2ff; /* Hover effect */
+  border-left: 4px solid #00d2ff;
 }
 
-/* Checkbox & Icons */
 .checkbox {
   display: flex;
   align-items: center;
@@ -109,8 +110,8 @@ body {
 }
 
 .icon.checked {
-  color: #00ff88; /* Green for done */
-  filter: drop-shadow(0 0 5px #00ff88); /* Backlight/Glow Effect */
+  color: #00ff88;
+  filter: drop-shadow(0 0 5px #00ff88);
 }
 
 .delete-icon {
@@ -123,8 +124,13 @@ body {
   transform: scale(1.2);
 }
 
-/* Text Strikethrough */
 .line_through {
   text-decoration: line-through;
   color: #666;
+}
+
+.no-record {
+  text-align: center;
+  color: rgba(255,255,255,0.3);
+  padding: 40px 0;
 }
