@@ -108,6 +108,23 @@ app.delete('/delete/:id', (req, res) => {
 // ================== SERVER ==================
 
 const PORT = process.env.PORT || 3001;
+// Google Login Route
+app.post('/google-login', async (req, res) => {
+    const { email, googleId, name } = req.body
+    try {
+        let user = await UserModel.findOne({ email })
+        if (!user) {
+            user = await UserModel.create({
+                email,
+                password: googleId,
+                name
+            })
+        }
+        res.json({ userId: user._id })
+    } catch (err) {
+        res.json(err)
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

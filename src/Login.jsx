@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { auth, googleProvider } from './firebase'
+import { signInWithPopup } from 'firebase/auth'
 
 const BASE_URL = "https://todolist-9z93.onrender.com";
 
@@ -8,9 +10,9 @@ function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
+    const [googleLoading, setGoogleLoading] = useState(false)
     const navigate = useNavigate()
 
-    // ✅ Wake up Render server as soon as login page opens
     useEffect(() => {
         axios.get(`${BASE_URL}/get/ping`).catch(() => {})
     }, [])
@@ -38,6 +40,27 @@ function Login() {
         })
     }
 
+    const handleGoogleLogin = async () => {
+        setGoogleLoading(true)
+        try {
+            const result = await signInWithPopup(auth, googleProvider)
+            const user = result.user
+            const res = await axios.post(`${BASE_URL}/google-login`, {
+                email: user.email,
+                googleId: user.uid,
+                name: user.displayName
+            })
+            if(res.data.userId){
+                localStorage.setItem("userId", res.data.userId)
+                localStorage.setItem("userEmail", user.email)
+                window.location.href = "/"
+            }
+        } catch (err) {
+            alert("Google login failed!")
+            setGoogleLoading(false)
+        }
+    }
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -59,6 +82,39 @@ function Login() {
                     <div style={{ fontSize: '48px' }}>✅</div>
                     <h2 style={{ color: 'white', margin: '10px 0 5px', fontSize: '28px' }}>Welcome Back!</h2>
                     <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>Login to your Todo List</p>
+                </div>
+
+                {/* Google Button */}
+                <button
+                    onClick={handleGoogleLogin}
+                    disabled={googleLoading}
+                    style={{
+                        width: '100%',
+                        padding: '13px',
+                        borderRadius: '10px',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        background: 'white',
+                        color: '#333',
+                        fontSize: '15px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        marginBottom: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '10px',
+                        boxSizing: 'border-box'
+                    }}
+                >
+                    <img src="https://www.google.com/favicon.ico" width="20" height="20" alt="Google" />
+                    {googleLoading ? '⏳ Connecting...' : 'Continue with Google'}
+                </button>
+
+                {/* Divider */}
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                    <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.2)' }} />
+                    <span style={{ color: 'rgba(255,255,255,0.4)', padding: '0 10px', fontSize: '13px' }}>or</span>
+                    <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.2)' }} />
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
@@ -118,7 +174,8 @@ function Login() {
                         fontWeight: 'bold',
                         cursor: loading ? 'not-allowed' : 'pointer',
                         marginBottom: '16px',
-                        transition: 'all 0.3s'
+                        transition: 'all 0.3s',
+                        boxSizing: 'border-box'
                     }}
                 >
                     {loading ? '⏳ Logging in...' : '🚀 Login'}
